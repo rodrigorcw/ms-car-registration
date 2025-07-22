@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Cars - List and Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light py-4">
+
+<div class="container">
+
+    <div class="mb-4 text-center">
+        <img src="car-banner.jpg" class="img-fluid rounded" alt="Cars" style="max-height: 300px;">
+    </div>
+
+    <div class="text-center mb-4">
+        <img src="https://via.placeholder.com/800x200?text=Car+Showroom" class="img-fluid rounded" alt="Banner de Carros">
+    </div>
+
+    <h1 class="mb-4 text-center">Cars Register</h1>
+
+    <form id="car-form" class="row g-3 mb-5">
+        <input type="hidden" id="car-id"/>
+        <div class="col-md-3">
+            <input type="text" id="make" class="form-control" placeholder="Make" required/>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="name" class="form-control" placeholder="Name" required/>
+        </div>
+        <div class="col-md-2">
+            <select id="fuelType" class="form-select" required>
+                <option value="" selected hidden>Fuel Type</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Ethanol">Ethanol</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select id="bodyType" class="form-select" required>
+                <option value="" selected hidden>Body Type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="SUV">SUV</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Convertible">Convertible</option>
+                <option value="Wagon">Wagon</option>
+                <option value="Van">Van</option>
+                <option value="Pickup Truck">Pickup Truck</option>
+                <option value="Minivan">Minivan</option>
+                <option value="Crossover">Crossover</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" id="doors" class="form-control" placeholder="Doors" required min="1" max="5"/>
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="100" id="mileage" class="form-control" placeholder="Mileage" required/>
+        </div>
+        <div class="col-md-2">
+            <select id="transmission" class="form-select" required style="width: 180px;">
+                <option value="" selected hidden>Transmission</option>
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" id="seats" class="form-control" placeholder="Seats" required/>
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="colour" class="form-control" placeholder="Colour" required/>
+        </div>
+        <div class="col-md-2">
+            <select id="engine" class="form-select" required>
+                <option value="" selected hidden>Engine</option>
+                <option value="1.0">1.0</option>
+                <option value="1.5">1.5</option>
+                <option value="2.0 Turbo">2.0 Turbo</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" id="nctExpire" class="form-control" placeholder="NCT Expire" required/>
+        </div>
+        <div class="col-md-2">
+            <input type="number" id="totalOwners" class="form-control" placeholder="Total Owners" required/>
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="registrationPlate" class="form-control" placeholder="Registration Plate" required/>
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="100" id="price" class="form-control" placeholder="Price (€)" required/>
+        </div>
+        <div class="col-md-2">
+            <select id="status" class="form-select" required style="width: 180px;">
+                <option value="" selected hidden>Select Status</option>
+                <option value="AVALIABLE">AVALIABLE</option>
+                <option value="SELL">SELL</option>
+                <option value="SOLD">SOLD</option>
+                <option value="MAINTENANCE">MAINTENANCE</option>
+            </select>
+        </div>
+        <div class="col-12 d-grid">
+            <button type="submit" class="btn btn-primary" id="submit-button">Register</button>
+        </div>
+    </form>
+
+    <h2 class="mb-3">List of Cars</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped" id="car-table">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Make</th>
+                <th>Name</th>
+                <th>FuelType</th>
+                <th>BodyType</th>
+                <th>Doors</th>
+                <th>Mileage</th>
+                <th>Transmission</th>
+                <th>Seats</th>
+                <th>Colour</th>
+                <th>Engine</th>
+                <th>NctExpire</th>
+                <th>TotalOwners</th>
+                <th>RegistrationPlate</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="car-table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Toast de sucesso (fora do <script>) -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Registro realizado com sucesso!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_URL = 'http://localhost:8080/api/cars';
+
+    async function fetchCars() {
+        try {
+            const response = await fetch(API_URL);
+            const cars = await response.json();
+
+            const tableBody = document.getElementById('car-table-body');
+            tableBody.innerHTML = '';
+
+            cars.forEach(car => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${car.id}</td>
+                    <td>${car.make}</td>
+                    <td>${car.name}</td>
+                    <td>${car.fuelType}</td>
+                    <td>${car.bodyType}</td>
+                    <td>${car.doors}</td>
+                    <td>${car.mileage}</td>
+                    <td>${car.transmission}</td>
+                    <td>${car.seats}</td>
+                    <td>${car.colour}</td>
+                    <td>${car.engine}</td>
+                    <td>${formatDate(car.nctExpire)}</td>
+                    <td>${car.totalOwners}</td>
+                    <td>${car.registrationPlate}</td>
+                    <td>${car.price.toFixed(2)}</td>
+                    <td>${car.status}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" onclick="editCar('${car.id}', '${car.make}', '${car.name}', '${car.fuelType}', '${car.bodyType}', ${car.doors}, ${car.mileage}, '${car.transmission}', ${car.seats}, '${car.colour}', ${car.engine}, '${car.nctExpire}', ${car.totalOwners}, '${car.registrationPlate}', ${car.price}, '${car.status}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCar(${car.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error fetching cars:', error);
+        }
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toISOString().slice(0, 10);
+    }
+
+    async function postCar(car) {
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(car)
+            });
+
+            if (response.ok) {
+                resetForm();
+                fetchCars();
+                showSuccessToast();  // Mostra toast sucesso
+            } else {
+                const errorText = await response.text();
+                alert('Erro ao adicionar carro: ' + errorText);
+            }
+        } catch (error) {
+            console.error('Erro ao enviar carro:', error);
+        }
+    }
+
+    async function updateCar(id, car) {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(car)
+            });
+
+            if (response.ok) {
+                resetForm();
+                fetchCars();
+                showSuccessToast();  // Mostra toast sucesso
+            } else {
+                const errorText = await response.text();
+                alert('Erro ao atualizar carro: ' + errorText);
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar carro:', error);
+        }
+    }
+
+    async function deleteCar(id) {
+        if (!confirm("Tem certeza que deseja excluir este carro?")) return;
+
+        try {
+            const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+
+            if (response.ok) {
+                fetchCars();
+            } else {
+                const errorText = await response.text();
+                alert('Erro ao excluir carro: ' + errorText);
+            }
+        } catch (error) {
+            console.error('Erro ao excluir carro:', error);
+        }
+    }
+
+    function editCar(id, make, name, fuelType, bodyType, doors,
+                     mileage, transmission, seats, colour,
+                     engine, nctExpire, totalOwners,
+                     registrationPlate, price, status) {
+
+        document.getElementById('car-id').value = id;
+        document.getElementById('make').value = make;
+        document.getElementById('name').value = name;
+        document.getElementById('fuelType').value = fuelType;
+        document.getElementById('bodyType').value = bodyType;
+        document.getElementById('doors').value = doors;
+        document.getElementById('mileage').value = mileage;
+        document.getElementById('transmission').value = transmission;
+        document.getElementById('seats').value = seats;
+        document.getElementById('colour').value = colour;
+        document.getElementById('engine').value = engine;
+
+        // Ajusta formato da data para o input date
+        document.getElementById('nctExpire').value = nctExpire ? new Date(nctExpire).toISOString().slice(0, 10) : '';
+
+        document.getElementById('totalOwners').value = totalOwners;
+        document.getElementById('registrationPlate').value = registrationPlate;
+        document.getElementById('price').value = price;
+        document.getElementById('status').value = status;
+
+        document.getElementById('submit-button').textContent = 'Update';
+    }
+
+    function resetForm() {
+        document.getElementById('car-form').reset();
+        document.getElementById('car-id').value = '';
+        document.getElementById('submit-button').textContent = 'Register';
+    }
+
+    document.getElementById('car-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const id = document.getElementById('car-id').value;
+
+        const carData = {
+            make: document.getElementById('make').value,
+            name: document.getElementById('name').value,
+            fuelType: document.getElementById('fuelType').value,
+            bodyType: document.getElementById('bodyType').value,
+            doors: parseInt(document.getElementById('doors').value),
+            mileage: parseFloat(document.getElementById('mileage').value),
+            transmission: document.getElementById('transmission').value,
+            seats: parseInt(document.getElementById('seats').value),
+            colour: document.getElementById('colour').value,
+            engine: parseFloat(document.getElementById('engine').value),
+            nctExpire: document.getElementById('nctExpire').value,
+            totalOwners: parseInt(document.getElementById('totalOwners').value),
+            registrationPlate: document.getElementById('registrationPlate').value,
+            price: parseFloat(document.getElementById('price').value),
+            status: document.getElementById('status').value
+        };
+
+        if (id) {
+            updateCar(id, carData);
+        } else {
+            postCar(carData);
+        }
+    });
+
+    window.onload = fetchCars;
+
+    // Função para exibir o toast de sucesso
+    function showSuccessToast() {
+        const toastElement = document.getElementById('successToast');
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    }
+</script>
+
+</body>
+</html>
