@@ -103,7 +103,7 @@ mvn test
 
 ## ✍️ Author
 
-Rodrigo Wenzel — your.email@example.com
+Rodrigo Wenzel — rodrigocw90@gmail.com
 
 ---
 
