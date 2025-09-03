@@ -9,12 +9,24 @@ An API for managing car registrations, allowing you to add, view, and update det
 
 ## 🛠️ Technologies Used
 
+Backend:
+
 - ☕ Java 17+
 - 🌱 Spring Boot
 - 🗄️ Spring Data JPA (Hibernate)
-- 🛢️ Relational database (e.g. MySQL, PostgreSQL)
+- 🛢️ Relational database PostgreSQL
 - 🧰 Lombok
 - 📦 Jackson (for JSON serialization)
+- 📄 Swagger (API Documentation)
+
+
+
+Frontend:
+
+- 🌐 HTML
+- 🎨 CSS
+- ⚡ JavaScript
+- 🖌️ Bootstrap 5
 
 ---
 
@@ -47,18 +59,18 @@ Represents a registered car in the system with the following fields:
 
 ### 📋 Prerequisites
 
-- Java 17 or higher  
-- Maven 3.x  
+- Java 17 or higher
+- Maven 3.x
 - Configured relational database (MySQL, PostgreSQL, etc.)
 
 ### ⚙️ Steps
 
-1. **Clone the repository:**  
+1. **Clone the repository:**
 ```bash
 git clone https://github.com/your-username/car-registration-api.git
 ```
 
-2. **Configure your database connection** in `application.properties` or `application.yml`:  
+2. **Configure your database connection** in `application.properties` or `application.yml`:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/car_db
 spring.datasource.username=your_username
@@ -67,13 +79,13 @@ spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-3. **Build and run the application using Maven:**  
+3. **Build and run the application using Maven:**
 ```bash
 mvn clean install
 mvn spring-boot:run
 ```
 
-4. The API will be available at:  
+4. The API will be available at:
 ```
 http://localhost:8080
 ```
@@ -94,7 +106,7 @@ http://localhost:8080
 
 ## 🧪 Testing
 
-To run tests (if any):  
+To run tests (if any):
 ```bash
 mvn test
 ```
