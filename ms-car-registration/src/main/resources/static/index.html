@@ -1,25 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Cars - List and Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Smaller, compact, and centered table */
+        #car-table {
+          font-size: 0.8rem; /* smaller font size */
+        }
+
+        #car-table th,
+        #car-table td {
+          padding: 0.3rem;          /* less padding */
+          text-align: center;       /* center horizontally */
+          vertical-align: middle;   /* center vertically */
+        }
+    </style>
 </head>
 <body class="bg-light py-4">
 
 <div class="container">
 
+    <!-- Banner images -->
     <div class="mb-4 text-center">
         <img src="car-banner.jpg" class="img-fluid rounded" alt="Cars" style="max-height: 300px;">
     </div>
 
     <div class="text-center mb-4">
-        <img src="https://via.placeholder.com/800x200?text=Car+Showroom" class="img-fluid rounded" alt="Banner de Carros">
+        <img src="https://via.placeholder.com/800x200?text=Car+Showroom" class="img-fluid rounded"
+             alt="Company Banner">
     </div>
 
     <h1 class="mb-4 text-center">Cars Register</h1>
 
+    <!-- Car registration form -->
     <form id="car-form" class="row g-3 mb-5">
         <input type="hidden" id="car-id"/>
         <div class="col-md-3">
@@ -72,14 +88,7 @@
         <div class="col-md-2">
             <input type="text" id="colour" class="form-control" placeholder="Colour" required/>
         </div>
-        <div class="col-md-2">
-            <select id="engine" class="form-select" required>
-                <option value="" selected hidden>Engine</option>
-                <option value="1.0">1.0</option>
-                <option value="1.5">1.5</option>
-                <option value="2.0 Turbo">2.0 Turbo</option>
-            </select>
-        </div>
+        <div class="col-md-2"> <select id="engine" class="form-select" required> <option value="" selected hidden>Engine</option> <option value="1.0">1.0</option> <option value="1.5">1.5</option> <option value="2.0 Turbo">2.0 Turbo</option> </select> </div>
         <div class="col-md-2">
             <input type="date" id="nctExpire" class="form-control" placeholder="NCT Expire" required/>
         </div>
@@ -95,8 +104,7 @@
         <div class="col-md-2">
             <select id="status" class="form-select" required style="width: 180px;">
                 <option value="" selected hidden>Select Status</option>
-                <option value="AVALIABLE">AVALIABLE</option>
-                <option value="SELL">SELL</option>
+                <option value="AVAILABLE">AVAILABLE</option>
                 <option value="SOLD">SOLD</option>
                 <option value="MAINTENANCE">MAINTENANCE</option>
             </select>
@@ -108,11 +116,11 @@
 
     <h2 class="mb-3">List of Cars</h2>
 
+    <!-- Car table -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover table-striped" id="car-table">
             <thead class="table-dark">
             <tr>
-                <th>ID</th>
                 <th>Make</th>
                 <th>Name</th>
                 <th>FuelType</th>
@@ -136,14 +144,16 @@
     </div>
 </div>
 
-<!-- Toast de sucesso (fora do <script>) -->
+<!-- Success Toast for Registration and Deletion -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
-            <div class="toast-body">
-                Registro realizado com sucesso!
+            <div class="toast-body" id="toast-message">
+                Registration completed successfully!
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
         </div>
     </div>
 </div>
@@ -153,10 +163,12 @@
 <script>
     const API_URL = 'http://localhost:8080/api/cars';
 
+    // Fetch all cars from backend
     async function fetchCars() {
         try {
             const response = await fetch(API_URL);
             const cars = await response.json();
+            console.log('Cars fetched:', cars); // Debug log
 
             const tableBody = document.getElementById('car-table-body');
             tableBody.innerHTML = '';
@@ -164,7 +176,6 @@
             cars.forEach(car => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${car.id}</td>
                     <td>${car.make}</td>
                     <td>${car.name}</td>
                     <td>${car.fuelType}</td>
@@ -182,7 +193,7 @@
                     <td>${car.status}</td>
                     <td>
                         <button class="btn btn-sm btn-warning me-2" onclick="editCar('${car.id}', '${car.make}', '${car.name}', '${car.fuelType}', '${car.bodyType}', ${car.doors}, ${car.mileage}, '${car.transmission}', ${car.seats}, '${car.colour}', ${car.engine}, '${car.nctExpire}', ${car.totalOwners}, '${car.registrationPlate}', ${car.price}, '${car.status}')">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteCar(${car.id})">Delete</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCar('${car.id}')">Delete</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -192,12 +203,14 @@
         }
     }
 
+    // Format date to YYYY-MM-DD
     function formatDate(dateStr) {
         if (!dateStr) return '';
         const date = new Date(dateStr);
         return date.toISOString().slice(0, 10);
     }
 
+    // POST new car
     async function postCar(car) {
         try {
             const response = await fetch(API_URL, {
@@ -209,16 +222,17 @@
             if (response.ok) {
                 resetForm();
                 fetchCars();
-                showSuccessToast();  // Mostra toast sucesso
+                showSuccessToast('Car registered successfully!');
             } else {
                 const errorText = await response.text();
-                alert('Erro ao adicionar carro: ' + errorText);
+                alert('Error adding car: ' + errorText);
             }
         } catch (error) {
-            console.error('Erro ao enviar carro:', error);
+            console.error('Error sending car:', error);
         }
     }
 
+    // PUT update car
     async function updateCar(id, car) {
         try {
             const response = await fetch(`${API_URL}/${id}`, {
@@ -230,33 +244,36 @@
             if (response.ok) {
                 resetForm();
                 fetchCars();
-                showSuccessToast();  // Mostra toast sucesso
+                showSuccessToast('Car updated successfully!');
             } else {
                 const errorText = await response.text();
-                alert('Erro ao atualizar carro: ' + errorText);
+                alert('Error updating car: ' + errorText);
             }
         } catch (error) {
-            console.error('Erro ao atualizar carro:', error);
+            console.error('Error updating car:', error);
         }
     }
 
+    // DELETE a car
     async function deleteCar(id) {
-        if (!confirm("Tem certeza que deseja excluir este carro?")) return;
+        if (!confirm("Are you sure you want to delete this car?")) return;
 
         try {
             const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
 
             if (response.ok) {
                 fetchCars();
+                showSuccessToast('Car deleted successfully!');
             } else {
                 const errorText = await response.text();
-                alert('Erro ao excluir carro: ' + errorText);
+                alert('Error deleting car: ' + errorText);
             }
         } catch (error) {
-            console.error('Erro ao excluir carro:', error);
+            console.error('Error deleting car:', error);
         }
     }
 
+    // Fill form for editing
     function editCar(id, make, name, fuelType, bodyType, doors,
                      mileage, transmission, seats, colour,
                      engine, nctExpire, totalOwners,
@@ -273,10 +290,7 @@
         document.getElementById('seats').value = seats;
         document.getElementById('colour').value = colour;
         document.getElementById('engine').value = engine;
-
-        // Ajusta formato da data para o input date
         document.getElementById('nctExpire').value = nctExpire ? new Date(nctExpire).toISOString().slice(0, 10) : '';
-
         document.getElementById('totalOwners').value = totalOwners;
         document.getElementById('registrationPlate').value = registrationPlate;
         document.getElementById('price').value = price;
@@ -285,12 +299,14 @@
         document.getElementById('submit-button').textContent = 'Update';
     }
 
+    // Reset form
     function resetForm() {
         document.getElementById('car-form').reset();
         document.getElementById('car-id').value = '';
         document.getElementById('submit-button').textContent = 'Register';
     }
 
+    // Form submit handler
     document.getElementById('car-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -321,10 +337,12 @@
         }
     });
 
+    // Fetch cars on page load
     window.onload = fetchCars;
 
-    // Função para exibir o toast de sucesso
-    function showSuccessToast() {
+    // Show toast with custom message
+    function showSuccessToast(message) {
+        document.getElementById('toast-message').textContent = message;
         const toastElement = document.getElementById('successToast');
         const toast = new bootstrap.Toast(toastElement);
         toast.show();

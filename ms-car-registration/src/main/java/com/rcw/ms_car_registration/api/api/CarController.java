@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cars")
-@CrossOrigin(origins = "http://localhost") // para permitir requisições do HTML
+@CrossOrigin(origins = "http://localhost") // To accept request ->  HTML
 public class CarController {
 
 

@@ -1,6 +1,6 @@
 package com.rcw.ms_car_registration.api.application.service;
 
-import com.rcw.ms_car_registration.api.adapter.ToResponseDto;
+import com.rcw.ms_car_registration.api.adapter.ToResponseDTO;
 import com.rcw.ms_car_registration.api.application.dto.CarResponseDTO;
 import com.rcw.ms_car_registration.api.domain.model.Car;
 import com.rcw.ms_car_registration.api.domain.repository.CarRepositoy;
@@ -23,7 +23,7 @@ public class CarServiceImpl implements CarService {
     public List<CarResponseDTO> findAll() {
         List<CarResponseDTO> listCars = carRepositoy.findAll()
                 .stream()
-                .map(ToResponseDto::toResponseDto)
+                .map(ToResponseDTO::toResponseDto)
                 .toList();
         return listCars;
     }
@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Optional<CarResponseDTO> findById(Long id) {
         return carRepositoy.findById(id)
-                .map(ToResponseDto::toResponseDto);
+                .map(ToResponseDTO::toResponseDto);
 //        var carById = carRepositoy.findById(id).orElseThrow(() -> new NoSuchElementException("Car not exists"));
 //        return ToResponseDto.toResponseDto(carById);
     }
@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponseDTO createCar(Car car) {
-        return ToResponseDto.toResponseDto(carRepositoy.save(car));
+        return ToResponseDTO.toResponseDto(carRepositoy.save(car));
     }
 
     public CarResponseDTO updateCar(Long id, Car carDetails) {
@@ -63,7 +63,7 @@ public class CarServiceImpl implements CarService {
         car.setStatus(carDetails.getStatus());
 
         Car updatedCar = carRepositoy.save(car);
-        return ToResponseDto.toResponseDto(updatedCar);
+        return ToResponseDTO.toResponseDto(updatedCar);
 
     }
 

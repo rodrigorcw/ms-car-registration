@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "Tb_car")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Car {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,36 +28,17 @@ public class Car {
     private int seats;
     private String colour;
     private Float engine;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate nctExpire;
-
     private int totalOwners;
     @Column(unique = true)
     private String registrationPlate;
     private Double price;
     private CarStatus status;
 
-    public Car() {
+    
+
+
+    public Car(String make, String name, String s, String s1, Integer doors, Double mileage, String transmission, Integer seats, String colour, Float engine, LocalDate localDate, Integer integer, String s2, Double price, CarStatus status) {
     }
-
-    public Car(String make, String name, String fuelType, String bodyType, int doors, Double mileage, String transmission, int seats, String colour, Float engine, LocalDate nctExpire, int totalOwners, String registrationPlate, Double price, CarStatus status) {
-
-        this.make = make;
-        this.name = name;
-        this.fuelType = fuelType;
-        this.bodyType = bodyType;
-        this.doors = doors;
-        this.mileage = mileage;
-        this.transmission = transmission;
-        this.seats = seats;
-        this.colour = colour;
-        this.engine = engine;
-        this.nctExpire = nctExpire;
-        this.totalOwners = totalOwners;
-        this.registrationPlate = registrationPlate;
-        this.price = price;
-        this.status = status;
-    }
-
 }

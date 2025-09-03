@@ -3,7 +3,7 @@ package com.rcw.ms_car_registration.api.adapter;
 import com.rcw.ms_car_registration.api.application.dto.CarResponseDTO;
 import com.rcw.ms_car_registration.api.domain.model.Car;
 
-public class ToResponseDto {
+public class ToResponseDTO {
 
 
 

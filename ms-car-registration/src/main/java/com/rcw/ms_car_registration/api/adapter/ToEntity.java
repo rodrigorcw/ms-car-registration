@@ -9,6 +9,7 @@ public class ToEntity {
     public static Car toEntity(CarRequestDTO dto) {
 
         return new Car(
+                dto.id(),
                 dto.make(),
                 dto.name(),
                 dto.fuelType(),
